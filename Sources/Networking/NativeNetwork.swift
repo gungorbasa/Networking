@@ -10,6 +10,11 @@ import Combine
 
 final class NativeNetwork {
   private let session: URLSession = .shared
+  private let jsonDecoder: JSONDecoder
+
+  init(decoder: JSONDecoder) {
+    self.jsonDecoder = decoder
+  }
 }
 
 
@@ -20,7 +25,7 @@ extension NativeNetwork: Networking {
     let request = URLRequest(route)!
     return URLSession.shared.dataTaskPublisher(for: request)
       .map { $0.data }
-      .decode(type: T.self, decoder: JSONDecoder())
+      .decode(type: T.self, decoder: jsonDecoder)
       .eraseToAnyPublisher()
   }
 
@@ -29,11 +34,12 @@ extension NativeNetwork: Networking {
       completion(.failure(HTTPResponseError.badURL))
       return
     }
-    let dataTask = session.dataTask(with: request) { result in
+    let dataTask = session.dataTask(with: request) { [weak self] result in
+      guard let self = self else { return }
       switch result {
       case .success((_, let data)):
         do {
-          let object  = try JSONDecoder().decode(T.self, from: data)
+          let object  = try self.jsonDecoder.decode(T.self, from: data)
           completion(.success(object))
         } catch let error {
           completion(.failure(error))
