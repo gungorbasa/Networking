@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class NativeNetwork {
+public final class NativeNetwork {
   private let session: URLSession = .shared
   private let jsonDecoder: JSONDecoder
 
@@ -21,7 +21,7 @@ final class NativeNetwork {
 extension NativeNetwork: Networking {
   @available(iOS 13, *)
   @available(OSX 10.15, *)
-  func run<T: Decodable>(_ route: Routing) -> AnyPublisher<T, Error> {
+  public func run<T: Decodable>(_ route: Routing) -> AnyPublisher<T, Error> {
     let request = URLRequest(route)!
     return URLSession.shared.dataTaskPublisher(for: request)
       .map { $0.data }
@@ -29,7 +29,7 @@ extension NativeNetwork: Networking {
       .eraseToAnyPublisher()
   }
 
-  func run<T: Decodable>(_ route: Routing, completion: @escaping (Result<T, Error>) -> Void) {
+  public func run<T: Decodable>(_ route: Routing, completion: @escaping (Result<T, Error>) -> Void) {
     guard let request = URLRequest(route) else {
       completion(.failure(HTTPResponseError.badURL))
       return
