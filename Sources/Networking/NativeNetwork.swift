@@ -12,7 +12,7 @@ public final class NativeNetwork {
   private let session: URLSession = .shared
   private let jsonDecoder: JSONDecoder
 
-  init(decoder: JSONDecoder) {
+  public init(decoder: JSONDecoder) {
     self.jsonDecoder = decoder
   }
 }
