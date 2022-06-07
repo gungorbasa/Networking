@@ -6,4 +6,8 @@ public protocol Networking {
   @available(iOS 13, *)
   @available(OSX 10.15, *)
   func run<T>(_ route: Routing) -> AnyPublisher<T, Error> where T : Decodable
+
+  @available(iOS 13, *)
+  @available(OSX 10.15, *)
+  func run<T>(_ route: Routing) async throws -> T where T : Decodable
 }
