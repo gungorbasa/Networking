@@ -21,6 +21,17 @@ public final class NativeNetwork {
 extension NativeNetwork: Networking {
   @available(iOS 13, *)
   @available(OSX 10.15, *)
+  public func run<T>(_ route: Routing) async throws -> T where T : Decodable {
+    guard let request = URLRequest(route) else {
+      throw HTTPResponseError.badURL
+    }
+    let (data, _) = try await URLSession.shared.data(for: request)
+    let decoder = JSONDecoder()
+    return try decoder.decode(T.self, from: data)
+  }
+
+  @available(iOS 13, *)
+  @available(OSX 10.15, *)
   public func run<T: Decodable>(_ route: Routing) -> AnyPublisher<T, Error> {
     let request = URLRequest(route)!
     return URLSession.shared.dataTaskPublisher(for: request)
@@ -51,4 +62,3 @@ extension NativeNetwork: Networking {
     dataTask.resume()
   }
 }
-
