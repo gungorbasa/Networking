@@ -26,8 +26,7 @@ extension NativeNetwork: Networking {
       throw HTTPResponseError.badURL
     }
     let (data, _) = try await URLSession.shared.data(for: request)
-    let decoder = JSONDecoder()
-    return try decoder.decode(T.self, from: data)
+    return try jsonDecoder.decode(T.self, from: data)
   }
 
   @available(iOS 13, *)
@@ -50,7 +49,7 @@ extension NativeNetwork: Networking {
       switch result {
       case .success((_, let data)):
         do {
-          let object  = try self.jsonDecoder.decode(T.self, from: data)
+          let object  = try jsonDecoder.decode(T.self, from: data)
           completion(.success(object))
         } catch let error {
           completion(.failure(error))
