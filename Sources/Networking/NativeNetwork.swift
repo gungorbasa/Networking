@@ -49,7 +49,7 @@ extension NativeNetwork: Networking {
       switch result {
       case .success((_, let data)):
         do {
-          let object  = try jsonDecoder.decode(T.self, from: data)
+            let object  = try self.jsonDecoder.decode(T.self, from: data)
           completion(.success(object))
         } catch let error {
           completion(.failure(error))
