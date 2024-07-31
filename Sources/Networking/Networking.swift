@@ -1,7 +1,7 @@
 import Combine
 
-public protocol Networking {
-  func run<T: Decodable>(_ route: Routing, completion: @escaping (Result<T, Error>) -> Void)
+public protocol Networking: Sendable {
+  func run<T: Decodable>(_ route: Routing, completion: @escaping @Sendable (Result<T, Error>) -> Void)
 
   @available(iOS 13, *)
   @available(OSX 10.15, *)

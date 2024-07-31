@@ -38,8 +38,8 @@ extension NativeNetwork: Networking {
       .decode(type: T.self, decoder: jsonDecoder)
       .eraseToAnyPublisher()
   }
-
-  public func run<T: Decodable>(_ route: Routing, completion: @escaping (Result<T, Error>) -> Void) {
+  
+  public func run<T: Decodable>(_ route: Routing, completion: @escaping @Sendable (Result<T, Error>) -> Void) {
     guard let request = URLRequest(route) else {
       completion(.failure(HTTPResponseError.badURL))
       return
